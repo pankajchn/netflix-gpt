@@ -1,8 +1,24 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { validateSignUpData } from "../utils/validation.js";
 
 const Signup = () => {
   const [isUserSignIn, setIsUserSignIn] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
   const toggleSignUp = () => setIsUserSignIn(!isUserSignIn);
+
+  const email = useRef(null);
+  const password = useRef(null);
+
+  const handleSignUp = () => {
+    console.log(email.current.value);
+    console.log(password.current.value);
+
+    const message = validateSignUpData(
+      email.current.value,
+      password.current.value
+    );
+    setErrorMsg(message);
+  };
 
   return (
     <div className="h-screen relative ">
@@ -21,7 +37,12 @@ const Signup = () => {
         />
       </div>
 
-      <div className="w-[26rem] h-[36rem]  absolute top-32 left-[35rem] bg-black bg-opacity-80 rounded-md">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+        className="w-[26rem] h-[30rem] max-h-[50rem] absolute top-32 left-[35rem] bg-black bg-opacity-80 rounded-md"
+      >
         <div>
           <h2 className="text-white text-3xl ms-12 mt-6 font-bold">
             {isUserSignIn ? "Sign In" : "Sign Up"}
@@ -32,22 +53,29 @@ const Signup = () => {
           {!isUserSignIn && (
             <input
               type="text"
-              placeholder="Email your full name"
+              placeholder="Enter your full name"
               className="input input-bordered w-full max-w-xs px-3 py-4 bg-gray-800 bg-opacity-70 ms-12 rounded-md text-white"
             />
           )}
 
           <input
+            ref={email}
             type="text"
             placeholder="Email or mobile number"
             className="input input-bordered w-full max-w-xs px-3 py-4 bg-gray-800 bg-opacity-70 ms-12 mt-3 rounded-md text-white"
           />
           <input
+            ref={password}
             type="password"
             placeholder="Password"
             className="input input-bordered w-full max-w-xs px-3 py-4 bg-gray-800 bg-opacity-70 my-3 ms-12 rounded-md text-white"
           />
-          <button className="btn btn-wide bg-red-800 w-[20rem] mt-3 ms-12 py-3 px-2 text-white font-semibold rounded-md">
+          <p className="text-red-600 text-center">{errorMsg}</p>
+          <button
+            type="submit"
+            className="btn btn-wide bg-red-800 w-[20rem] mt-3 ms-12 py-3 px-2 text-white font-semibold rounded-md"
+            onClick={handleSignUp}
+          >
             {isUserSignIn ? "Sign In" : "Sign Up"}
           </button>
         </div>
@@ -72,10 +100,9 @@ const Signup = () => {
             </span>
           </p>
         )}
-
-        <div></div>
-      </div>
+      </form>
     </div>
   );
 };
+
 export default Signup;

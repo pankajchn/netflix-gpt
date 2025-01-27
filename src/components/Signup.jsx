@@ -1,23 +1,66 @@
 import { useRef, useState } from "react";
 import { validateSignUpData } from "../utils/validation.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import app from "../utils/firebase.js";
 
 const Signup = () => {
   const [isUserSignIn, setIsUserSignIn] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
+  const [showToast, setShowToast] = useState(false);
+
   const toggleSignUp = () => setIsUserSignIn(!isUserSignIn);
 
   const email = useRef(null);
   const password = useRef(null);
 
-  const handleSignUp = () => {
-    console.log(email.current.value);
-    console.log(password.current.value);
+  const auth = getAuth();
 
+  const handleSignUp = async () => {
     const message = validateSignUpData(
       email.current.value,
       password.current.value
     );
     setErrorMsg(message);
+
+    if (message) return;
+
+    if (!isUserSignIn) {
+      try {
+        const res = await createUserWithEmailAndPassword(
+          auth,
+          email.current.value,
+          password.current.value
+        );
+
+        setShowToast(true);
+        setTimeout(function () {
+          setShowToast(false);
+        }, 3000);
+
+        console.log(res);
+      } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMsg(errorCode + " - " + errorMessage);
+      }
+    } else {
+      try {
+        const res = await signInWithEmailAndPassword(
+          auth,
+          email.current.value,
+          password.current.value
+        );
+        console.log(res);
+      } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMsg(errorCode + " - " + errorMessage);
+      }
+    }
   };
 
   return (
@@ -41,7 +84,7 @@ const Signup = () => {
         onSubmit={(e) => {
           e.preventDefault();
         }}
-        className="w-[26rem] h-[30rem] max-h-[50rem] absolute top-32 left-[35rem] bg-black bg-opacity-80 rounded-md"
+        className="w-[26rem] h-[30rem] max-h-[60rem] absolute top-32 left-[35rem] bg-black bg-opacity-80 rounded-md"
       >
         <div>
           <h2 className="text-white text-3xl ms-12 mt-6 font-bold">
@@ -101,6 +144,14 @@ const Signup = () => {
           </p>
         )}
       </form>
+
+      {showToast && (
+        <div className="toast toast-top toast-center">
+          <div className="alert alert-success">
+            <span>Sign up successfully.</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

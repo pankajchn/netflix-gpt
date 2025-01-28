@@ -3,13 +3,21 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import appStore from "../src/utils/appStore.js";
+import Browse from "./components/Browse.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-      </Routes>
-    </BrowserRouter>{" "}
-  </StrictMode>
+  <Provider store={appStore}>
+    <StrictMode>
+      <BrowserRouter basename="/">
+        <Routes>
+          <Route>
+            <Route path="/" element={<App />} />
+            <Route path="/browse" element={<Browse />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>{" "}
+    </StrictMode>
+  </Provider>
 );

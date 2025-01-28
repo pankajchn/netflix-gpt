@@ -6,11 +6,13 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import app from "../utils/firebase.js";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
+
   const [isUserSignIn, setIsUserSignIn] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
-  const [showToast, setShowToast] = useState(false);
 
   const toggleSignUp = () => setIsUserSignIn(!isUserSignIn);
 
@@ -30,18 +32,13 @@ const Signup = () => {
 
     if (!isUserSignIn) {
       try {
-        const res = await createUserWithEmailAndPassword(
+        await createUserWithEmailAndPassword(
           auth,
           email.current.value,
           password.current.value
         );
 
-        setShowToast(true);
-        setTimeout(function () {
-          setShowToast(false);
-        }, 3000);
-
-        console.log(res);
+        navigate("/browse");
       } catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -49,12 +46,12 @@ const Signup = () => {
       }
     } else {
       try {
-        const res = await signInWithEmailAndPassword(
+        await signInWithEmailAndPassword(
           auth,
           email.current.value,
           password.current.value
         );
-        console.log(res);
+        navigate("/browse");
       } catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -116,7 +113,7 @@ const Signup = () => {
           <p className="text-red-600 text-center">{errorMsg}</p>
           <button
             type="submit"
-            className="btn btn-wide bg-red-800 w-[20rem] mt-3 ms-12 py-3 px-2 text-white font-semibold rounded-md"
+            className="btn bg-red-800 w-[20rem] mt-3 ms-12 py-3 px-2 text-white font-semibold rounded-md"
             onClick={handleSignUp}
           >
             {isUserSignIn ? "Sign In" : "Sign Up"}
@@ -144,14 +141,6 @@ const Signup = () => {
           </p>
         )}
       </form>
-
-      {showToast && (
-        <div className="toast toast-top toast-center">
-          <div className="alert alert-success">
-            <span>Sign up successfully.</span>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import app from "../utils/firebase.js";
 import { useNavigate } from "react-router-dom";
+import { BG_LARGE, NETFLIX_LOGO } from "../utils/constants.js";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -62,19 +63,10 @@ const Signup = () => {
 
   return (
     <div className="h-screen relative ">
-      <img
-        src="https://assets.nflxext.com/ffe/siteui/vlv3/7a8c0067-a424-4e04-85f8-9e25a49a86ed/web/IN-en-20250120-TRIFECTA-perspective_860a95da-c386-446e-af83-fef8ddd80803_large.jpg"
-        alt="Netflix Background"
-        className=" bg-opacity-50"
-      />
+      <img src={BG_LARGE} alt="bg large" className=" bg-opacity-50" />
 
       <div className="absolute top-8 left-36 z-20">
-        {/* Netflix Logo */}
-        <img
-          src="https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production/consent/87b6a5c0-0104-4e96-a291-092c11350111/01938dc4-59b3-7bbc-b635-c4131030e85f/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-          alt="logo"
-          className="w-44"
-        />
+        <img src={NETFLIX_LOGO} alt="logo" className="w-44" />
       </div>
 
       <form

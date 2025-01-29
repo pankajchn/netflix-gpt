@@ -16,9 +16,10 @@ const App = () => {
         dispatch(
           addUser({ uid: user.uid, email: user.email, name: user.displayName })
         );
+        navigate("/browse");
       } else {
-        dispatch(removeUser());
         navigate("/");
+        dispatch(removeUser());
       }
     });
   }, []);

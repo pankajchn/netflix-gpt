@@ -1,28 +1,16 @@
 import Navbar from "./Navbar";
-import { useEffect } from "react";
-import { API_OPTIONS } from "../utils/constants";
+import useNowPlayingMovies from "../hooks/useNowPlayingMovies";
+import HeroSection from "./HeroSection";
+import MovieList from "./movieList";
 
 const Browse = () => {
-  const getNowPlayingMovies = async () => {
-    try {
-      const res = await fetch(
-        "https://api.themoviedb.org/3/movie/now_playing?page=1",
-        API_OPTIONS
-      );
-      const json = res.json();
-      console.log(json.results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getNowPlayingMovies();
-  }, []);
+  useNowPlayingMovies();
 
   return (
     <div>
       <Navbar />
+      <HeroSection />
+      <MovieList/>
     </div>
   );
 };

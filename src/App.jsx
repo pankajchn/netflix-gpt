@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "./utils/userSlice";
 import Signup from "./components/Signup";

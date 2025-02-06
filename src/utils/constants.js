@@ -15,3 +15,11 @@ export const API_OPTIONS = {
       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1M2Y5ZmUyNzQ5YmNkNjExOTMwZjUyMzRjNTk2OGI1MCIsIm5iZiI6MTczODE3MTU2Ni40MDMsInN1YiI6IjY3OWE2NGFlYTI5NTI2YTFlMzI0NjU5MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.OsLX6A1lt8TWsjuuV6nR7A_xACWmPcVDZ3thOJTuQ-Y",
   },
 };
+
+export const POSTER_PATH = "https://image.tmdb.org/t/p/w300/";
+
+export const SUPPORTED_LANGUAGES = [
+  { identifier: "en", name: "English" },
+  { identifier: "hi", name: "Hindi" },
+  { identifier: "es", name: "Spanish" },
+];

@@ -10,8 +10,8 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
-      <VedioTitle title={original_title} overview={overview} />
       <VedioPlayer movieId={id} />
+      <VedioTitle title={original_title} overview={overview} />
     </div>
   );
 };

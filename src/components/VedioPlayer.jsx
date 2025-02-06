@@ -7,10 +7,10 @@ const VedioPlayer = ({ movieId }) => {
   const trailer = useSelector((store) => store.movie?.trailerVedio);
 
   return (
-    <div className="absolute top-0">
+    <div className="h-4/5">
       {trailer && (
         <iframe
-          className="w-screen aspect-video h-[35rem]"
+        className="w-screen h-[100vh] aspect-video object-cover"
           src={
             "https://www.youtube.com/embed/" +
             trailer.key +

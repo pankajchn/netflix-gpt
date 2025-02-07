@@ -1,13 +1,20 @@
 import { getAuth, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { NETFLIX_LOGO, USER_AVATAR } from "../utils/constants";
 import { useState } from "react";
 import searchIcon from "../../assets/search_icon.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleGPTSearchComponent } from "../utils/gptSearchSlice.js";
+import { SUPPORTED_LANGUAGES } from "../utils/constants";
+import { changeLanguage } from "../utils/configSlice.js";
+
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const isShowGPTSearchComponent = useSelector(
+    (store) => store.gptSearch?.gptSearchComponent
+  );
+  console.log(isShowGPTSearchComponent);
 
   const auth = getAuth();
   const navigate = useNavigate();
@@ -24,6 +31,10 @@ const Navbar = () => {
 
   const showGPTSearchComponent = () => {
     dispatch(toggleGPTSearchComponent());
+  };
+
+  const handleLanguageChange = (e) => {
+    dispatch(changeLanguage(e.target.value));
   };
 
   return (
@@ -73,7 +84,7 @@ const Navbar = () => {
         <div className="navbar-center hidden lg:flex relative right-[35rem]">
           <ul className="menu menu-horizontal px-1 font-poppins">
             <li>
-              <a>Home</a>
+              <Link to="/browse">Home</Link>
             </li>
             <li>
               <a>TV Shows</a>
@@ -91,22 +102,30 @@ const Navbar = () => {
         </div>
 
         <div className="mr-3 font-poppins">
-          <select name="languages">
-            <option value="en">English</option>
-            <option value="hi">Hindi</option>
-            <option value="es">Spanish</option>
+          <select
+            name="languages"
+            className="outline-none"
+            onChange={handleLanguageChange}
+          >
+            {SUPPORTED_LANGUAGES.map((lang) => (
+              <option value={lang.identifier} key={lang.identifier}>
+                {lang.name}
+              </option>
+            ))}
           </select>
         </div>
 
-        <div className="mr-2">
-          <button
-            className="flex items-center gap-2"
-            onClick={showGPTSearchComponent}
-          >
-            <span className="font-poppins">GPT Search</span>
-            <img src={searchIcon} />
-          </button>
-        </div>
+        {!isShowGPTSearchComponent?  (
+          <div className="mr-2">
+            <button
+              className="flex items-center gap-2"
+              onClick={showGPTSearchComponent}
+            >
+              <span className="font-poppins">GPT Search</span>
+              <img src={searchIcon} />
+            </button>
+          </div>
+        ): <div><button onClick={showGPTSearchComponent} className="font-poppins">Home</button></div>}
 
         <div className="relative left-4">
           <button

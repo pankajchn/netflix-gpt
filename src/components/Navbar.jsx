@@ -14,7 +14,6 @@ const Navbar = () => {
   const isShowGPTSearchComponent = useSelector(
     (store) => store.gptSearch?.gptSearchComponent
   );
-  console.log(isShowGPTSearchComponent);
 
   const auth = getAuth();
   const navigate = useNavigate();

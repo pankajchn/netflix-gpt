@@ -3,10 +3,12 @@ import SearchResultsList from "./SearchResultsList";
 
 const GPTSearch = () => {
   return (
-    <div className="relative top-40 text-center">
+    <div className="relative top-[69px] h-screen text-center bg-black">
+      
       <GPTSearchBar />
-      <SearchResultsList/>
+      <SearchResultsList />
     </div>
   );
 };
 export default GPTSearch;
+

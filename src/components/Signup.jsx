@@ -4,6 +4,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import app from "../utils/firebase.js";
 import { useNavigate } from "react-router-dom";
@@ -16,11 +17,10 @@ const Signup = () => {
   const [errorMsg, setErrorMsg] = useState("");
 
   const toggleSignUp = () => setIsUserSignIn(!isUserSignIn);
-
+  const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
-
-  const auth = getAuth();
+  const auth = getAuth(app);
 
   const handleSignUp = async () => {
     const message = validateSignUpData(
@@ -32,14 +32,17 @@ const Signup = () => {
     if (message) return;
 
     if (!isUserSignIn) {
+      if (!name.current.value) return setErrorMsg("Please enter your name");
+
       try {
-        await createUserWithEmailAndPassword(
+        const userCredential = await createUserWithEmailAndPassword(
           auth,
           email.current.value,
           password.current.value
         );
-
-        navigate("/browse");
+        const user = userCredential.user;
+        await updateProfile(user, { displayName: name.current.value });
+        navigate("/");
       } catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -52,7 +55,7 @@ const Signup = () => {
           email.current.value,
           password.current.value
         );
-        navigate("/browse");
+        navigate("/");
       } catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -62,21 +65,29 @@ const Signup = () => {
   };
 
   return (
-    <div className="h-screen relative ">
-      <img src={BG_LARGE} alt="bg large" className=" bg-opacity-50" />
+    <div className="bg-black h-screen relative">
+      <img
+        src={BG_LARGE}
+        alt="bg large"
+        className="hidden md:block fixed inset-0 bg-opacity-50 bg-gradient-to-r from-black to-transparent opacity-40 "
+      />
 
-      <div className="absolute top-8 left-36 z-20">
-        <img src={NETFLIX_LOGO} alt="logo" className="w-44" />
+      <div className="absolute top-[8px] left-4 md:top-8 md:left-36 z-20 text-center rounded-lg">
+        <img
+          src={NETFLIX_LOGO}
+          alt="logo"
+          className="fill-[#e50914] w-32 md:w-44"
+        />
       </div>
 
       <form
         onSubmit={(e) => {
           e.preventDefault();
         }}
-        className="w-[26rem] h-[30rem] max-h-[60rem] absolute top-32 left-[35rem] bg-black bg-opacity-80 rounded-md"
+        className="w-full px-5 md:w-[28rem] absolute top-20 md:top-32 md:left-[35rem] bg-[#000000b3] rounded-md md:px-16 md:py-12"
       >
         <div>
-          <h2 className="text-white text-3xl ms-12 mt-6 font-bold">
+          <h2 className="text-white text-3xl md:text-3xl mt-6 font-bold md:text-left">
             {isUserSignIn ? "Sign In" : "Sign Up"}
           </h2>
         </div>
@@ -84,28 +95,29 @@ const Signup = () => {
         <div className="my-10">
           {!isUserSignIn && (
             <input
+              ref={name}
               type="text"
-              placeholder="Enter your full name"
-              className="input input-bordered w-full max-w-xs px-3 py-4 bg-gray-800 bg-opacity-70 ms-12 rounded-md text-white"
+              placeholder="Name"
+              className="input border-gray-600 w-full  md:px-3 md:py-7 bg-transparent md:bg-[#161616b3] bg-opacity-70 rounded-md text-white"
             />
           )}
 
           <input
             ref={email}
             type="text"
-            placeholder="Email or mobile number"
-            className="input input-bordered w-full max-w-xs px-3 py-4 bg-gray-800 bg-opacity-70 ms-12 mt-3 rounded-md text-white"
+            placeholder="Email"
+            className="input border-gray-600 w-full md:px-3 md:py-7 bg-transparent md:bg-[#161616b3] bg-opacity-70 mt-3 rounded-md"
           />
           <input
             ref={password}
             type="password"
             placeholder="Password"
-            className="input input-bordered w-full max-w-xs px-3 py-4 bg-gray-800 bg-opacity-70 my-3 ms-12 rounded-md text-white"
+            className="input  border-gray-600 w-full px-5 md:px-3 md:py-7 bg-transparent md:bg-[#161616b3] bg-opacity-70 my-3 rounded-md text-white"
           />
-          <p className="text-red-600 text-center">{errorMsg}</p>
+          <p className="text-red-800 text-center">{errorMsg}</p>
           <button
             type="submit"
-            className="btn bg-red-800 w-[20rem] mt-3 ms-12 py-3 px-2 text-white font-semibold rounded-md"
+            className="btn bg-[#e50914] text-[18px] md:text-base w-full mt-4 text-white font-semibold rounded-md hover:bg-[#e50914] hover:bg-opacity-80"
             onClick={handleSignUp}
           >
             {isUserSignIn ? "Sign In" : "Sign Up"}

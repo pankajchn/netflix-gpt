@@ -7,12 +7,13 @@ const SearchResultsList = () => {
   if (!gptMoviesNames || !gptMoviesResultsOnTmdb) return null;
 
   return (
-    <div className="mt-48">
+    <div className="relative top-48 md:top-[40rem] h-screen bg-black">
       {gptMoviesNames.map((movie, i) => (
         <MovieList
           key={movie}
           title={movie}
-          movies={gptMoviesResultsOnTmdb[i]}
+          movies={gptMoviesResultsOnTmdb[i]}  //gptMoviesResultsOnTmdb is an array
+
         />
       ))}
     </div>

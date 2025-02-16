@@ -1,14 +1,14 @@
 export const lang = {
   en: {
     search: "Search",
-    placeholder: "What would you like to watch today?",
+    placeholder: "Type a genre or mood...",
   },
   hi: {
     search: "खोज",
-    placeholder: "आज आप क्या देखना चाहेंगे?",
+    placeholder: "कोई शैली या मनोदशा लिखें...",
   },
   es: {
     search: "buscar",
-    placeholder: "¿Qué te gustaría ver hoy?",
+    placeholder: "Escribe un género o estado de ánimo...",
   },
 };

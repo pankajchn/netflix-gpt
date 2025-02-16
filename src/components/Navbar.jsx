@@ -1,5 +1,5 @@
 import { getAuth, signOut } from "firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { NETFLIX_LOGO, USER_AVATAR } from "../utils/constants";
 import { useState } from "react";
 import searchIcon from "../../assets/search_icon.svg";
@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleGPTSearchComponent } from "../utils/gptSearchSlice.js";
 import { SUPPORTED_LANGUAGES } from "../utils/constants";
 import { changeLanguage } from "../utils/configSlice.js";
-
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -22,7 +21,7 @@ const Navbar = () => {
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
@@ -37,111 +36,68 @@ const Navbar = () => {
   };
 
   return (
-    <div>
-      <div className="navbar bg-black fixed z-[1]">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
-              </svg>
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+    <div className="navbar flex justify-between bg-black fixed z-[1]">
+      <div>
+        <img src={NETFLIX_LOGO} className="w-28 md:w-32 cursor-pointer" />
+      </div>
+      <div className="me-2 md:me-8">
+        {isShowGPTSearchComponent && (
+          <div className="md:me-9 font-poppins hidden md:block">
+            <select
+              name="languages"
+              className="outline-none py-[5px]"
+              onChange={handleLanguageChange}
             >
-              <li>
-                <a>Home</a>
-              </li>
-              <li>
-                <a>About</a>
-              </li>
-              <li>
-                <a>Services</a>
-              </li>
-              <li>
-                <a>Movies</a>
-              </li>
-              <li>
-                <a>Contact</a>
-              </li>
-            </ul>
+              {SUPPORTED_LANGUAGES.map((lang) => (
+                <option value={lang.identifier} key={lang.identifier}>
+                  {lang.name}
+                </option>
+              ))}
+            </select>
           </div>
-          <img src={NETFLIX_LOGO} className="w-32 cursor-pointer" />
-        </div>
-        <div className="navbar-center hidden lg:flex relative right-[35rem]">
-          <ul className="menu menu-horizontal px-1 font-poppins">
-            <li>
-              <Link to="/browse">Home</Link>
-            </li>
-            <li>
-              <a>TV Shows</a>
-            </li>
-            <li>
-              <a>Movies</a>
-            </li>
-            <li>
-              <a>New & Popular</a>
-            </li>
-            <li>
-              <a>My List</a>
-            </li>
-          </ul>
-        </div>
+        )}
 
-        <div className="mr-3 font-poppins">
-          <select
-            name="languages"
-            className="outline-none"
-            onChange={handleLanguageChange}
-          >
-            {SUPPORTED_LANGUAGES.map((lang) => (
-              <option value={lang.identifier} key={lang.identifier}>
-                {lang.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {!isShowGPTSearchComponent?  (
-          <div className="mr-2">
+        {!isShowGPTSearchComponent ? (
+          <div className="me-4 md:me-3 md:px-2 md:border-[1px] rounded-sm md:hover:bg-gray-900">
             <button
-              className="flex items-center gap-2"
+              className="flex items-center text-xl"
               onClick={showGPTSearchComponent}
             >
-              <span className="font-poppins">GPT Search</span>
-              <img src={searchIcon} />
+              <span className="font-poppins">gpt</span>
+              <img className="ms-[2px]" src={searchIcon} />
             </button>
           </div>
-        ): <div><button onClick={showGPTSearchComponent} className="font-poppins">Home</button></div>}
+        ) : (
+          <div className="me-4 md:me-7 md:px-2 md:border-[1px] rounded-sm md:hover:bg-gray-900">
+            <button
+              onClick={showGPTSearchComponent}
+              className="font-poppins md:text-[18px]"
+            >
+              Home
+            </button>
+          </div>
+        )}
 
-        <div className="relative left-4">
+        <div className="relative left-[10px] md:left-4">
           <button
-            className="flex justify-between"
+            className="flex justify-between mt-[6px] md:mt-0"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <img src={USER_AVATAR} />
-            <span className={`ms-[5px] ${isOpen ? "rotate-180" : "rotate-0"}`}>
-              ▼
+            <img src={USER_AVATAR} className="md:w-8" />
+            <span
+              className={`ms-[2px] md:ms-[5px] ${
+                isOpen ? "rotate-180" : "rotate-0"
+              }`}
+            >
+              ▲
             </span>
           </button>
           {isOpen && (
-            <div className="absolute right-0 mt-40 w-32  shadow-lg rounded-lg overflow-hidden">
+            <div className="absolute right-0 mt-8 w-32  shadow-lg rounded-lg overflow-hidden">
               <ul className="border-2 border-white bg-[#191919] rounded-lg">
                 <li
                   onClick={handleSignOut}
-                  className="px-4 py-2 underline z-[1] text-white cursor-pointer"
+                  className="px-4 py-2 z-[1] text-white cursor-pointer"
                 >
                   Sign Out
                 </li>
